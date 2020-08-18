@@ -2,7 +2,7 @@
     <sei-header title="Attendees">
         <ion-button (click)="showFilters = !showFilters"><ion-icon name="funnel"></ion-icon></ion-button>
         <ion-button>
-             <ion-icon name="help-circle"></ion-icon>
+             <ion-icon name="send"></ion-icon>
         </ion-button>
 
         <ion-button>
@@ -81,11 +81,13 @@
 
         <ion-list>
             <ng-container *ngIf="attendees$ | async as attendees;">
-                <ion-item *ngFor="let  attendee of  attendees" [routerLink]="['/attendees', attendee._id]" lines="full">
-                    <sei-participant-avatar slot="start" [participant]="attendee"></sei-participant-avatar>
+                <ion-item *ngFor="let  attendee of  attendees" lines="full">
+                    <sei-participant-avatar [routerLink]="['/attendees', attendee._id]" slot="start" [participant]="attendee"></sei-participant-avatar>
                     <ion-grid>
-                        <ion-row>
-                            {{attendee.participantName}}
+                    <ion-row>
+                    <ion-col>
+                    <ion-row>
+                            {{attendee.participantName}}    
                         </ion-row>
 
                         <ion-row>
@@ -113,15 +115,25 @@
                             {{attendee.participantTitleRow3}}
                         </ion-row>
 
-                        <ion-row *ngIf="attendee.participantTitleRow3">
+                        <!-- <ion-row *ngIf="attendee.participantTitleRow3">
                             {{attendee.participantTitleRow3}}
-                        </ion-row>
+                        </ion-row> -->
 
                         <!-- TODO: leaderboard -->
                         <!-- <ion-row *ngIf="isLeaderboardSelected">
                         {{attendee.leaderboard_points}}
                     </ion-row>
                     isLeaderboardSelected -->
+                    </ion-col>
+<!--  -->
+                    <ion-col>
+                             <div>
+                             <ion-checkbox></ion-checkbox>
+                             </div>
+                            
+                            </ion-col>
+                    </ion-row>
+                        
                     </ion-grid>
                 </ion-item>
                 <ion-item *ngIf="!attendees.length">
