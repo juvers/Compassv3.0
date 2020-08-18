@@ -1,0 +1,42 @@
+<ng-container *ngIf="post?.photos?.length">
+    <ion-card-content *ngIf="!showSlider" (click)="openModal(post.photos)">
+        <div class="ion-activatable">
+            <ion-ripple-effect></ion-ripple-effect>
+            <img [src]="photos | chooseImage" />
+        </div>
+        <ion-label *ngIf="post.photos.length > 1" class="desc  ion-activatable">
+            +{{ post.photos.length - 1 }} photo{{ post.photos.length > 2 ? 's' : '' }}
+            <ion-ripple-effect></ion-ripple-effect>
+        </ion-label>
+    </ion-card-content>
+
+    <ng-container *ngIf="showSlider" class="post-img-slide">
+        <ion-item lines="none">
+            <ion-slides [options]="postImagesSlide" [pager]="true" #slider>
+                <ion-slide *ngFor="let photo of post.photos; let i = index">
+                    <div class="top-buttons">
+                        <ion-button (click)="download(photo)" fill="clear" class="download-button">
+                            <ion-icon size="large" color="light" name="ios-download"></ion-icon>
+                        </ion-button>
+
+                        <ion-button *ngIf="isEdit" (click)="remove(photo)" fill="clear" class="remove-button">
+                            <ion-icon size="large" color="light" name="ios-trash"></ion-icon>
+                        </ion-button>
+                    </div>
+                    <button (click)="slider.slidePrev()" class="slider-prev-button" [hidden]="i === 0">
+                        <ion-icon size="large" color="light" name="ios-arrow-back"></ion-icon>
+                    </button>
+
+                    <button
+                        (click)="slider.slideNext()"
+                        [hidden]="i === (post?.photos?.length ? post?.photos?.length : 0) - 1"
+                        class="slider-next-button"
+                    >
+                        <ion-icon size="large" color="light" name="ios-arrow-forward"> </ion-icon>
+                    </button>
+                    <img [src]="photo" alt="" tappable (click)="openPreview(photo)" />
+                </ion-slide>
+            </ion-slides>
+        </ion-item>
+    </ng-container>
+</ng-container>

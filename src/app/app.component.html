@@ -1,0 +1,7 @@
+<ion-app>
+    <ion-split-pane contentId="main-content">
+        <ion-menu contentId="main-content" type="reveal" side="start"> <sei-menu></sei-menu> </ion-menu>
+        <ion-router-outlet id="main-content"></ion-router-outlet>
+        <ion-modal-launcher [observables]="modalObservables"></ion-modal-launcher>
+    </ion-split-pane>
+</ion-app>

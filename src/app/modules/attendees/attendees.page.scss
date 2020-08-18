@@ -1,0 +1,10 @@
+ion-item-divider {
+    color: light;
+}
+
+ion-list {
+    ion-item {
+        --padding-bottom: 8px;
+        --padding-top: 8px;
+    }
+}

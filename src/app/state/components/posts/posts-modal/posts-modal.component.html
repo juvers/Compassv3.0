@@ -1,0 +1,17 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Posts</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="close()"><ion-icon name="close"></ion-icon></ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-card class="inactive" *ngFor="let post of posts">
+            <sei-promoted-post *ngIf="post.postFeatured" [post]="post"></sei-promoted-post>
+            <sei-post *ngIf="!post.postFeatured" [post]="post"></sei-post>
+        </ion-card>
+    </ion-list>
+</ion-content>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "701324749825",
+    "firebase_url": "https://compass-2-dev-c79e0.firebaseio.com",
+    "project_id": "compass-2-dev-c79e0",
+    "storage_bucket": "compass-2-dev-c79e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701324749825:android:4dfa2973f36f4dc9316400",
+        "android_client_info": {
+          "package_name": "com.seimi.compass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701324749825-qkiuqdc45tiv7d5gfsuosppsrlj4a85c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCJtxC18NaKSVXi47wecR00-CPwX5QhrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701324749825-qkiuqdc45tiv7d5gfsuosppsrlj4a85c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "701324749825-fc1c4tjcat6ti01884qpsmme6mp3clvo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seimi.compass2dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

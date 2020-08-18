@@ -1,0 +1,12 @@
+@import '../post.components.scss';
+@import '~@ionic/angular/css/text-alignment';
+
+ion-grid.promoted-post-birthday-grid {
+    ion-col {
+        @extend .ion-text-center;
+    }
+}
+
+.has-pulse {
+    min-height: 180px;
+}

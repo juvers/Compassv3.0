@@ -1,0 +1,59 @@
+ion-col {
+    padding: 0px;
+}
+.item-counts {
+    text-align: center;
+    ion-col {
+        font-size: 12px;
+        padding: 0px;
+        h1 {
+            font-size: 36px;
+        }
+    }
+}
+
+ion-content {
+    ion-button {
+        --inner-padding-top: 16px;
+        --inner-padding-bottom: 16px;
+        text-transform: none;
+        font-size: 16px;
+        height: 48px;
+        ion-icon {
+            margin-left: 0px;
+            position: absolute;
+            left: 16px;
+        }
+        span {
+            margin-left: 22px;
+            margin-right: 22px;
+        }
+    }
+}
+ion-card {
+    ion-item {
+        --inner-padding-start: 16px;
+        --inner-padding-end: 16px;
+        --padding-start: 0px;
+        --padding-end: 0px;
+        --inner-padding-top: 16px;
+        --inner-padding-bottom: 16px;
+    }
+
+    ion-item:last-child {
+        --inner-padding-bottom: 20px;
+    }
+}
+
+.item-title {
+    padding-bottom: 8px;
+}
+
+h1 {
+    margin-top: 10px;
+}
+
+sei-participant-avatar {
+    margin: 0 auto;
+    color: secondary;
+}

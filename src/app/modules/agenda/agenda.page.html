@@ -1,0 +1,180 @@
+<ion-header>
+    <sei-header title="Agenda">
+        <ion-button (click)="showFilters = !showFilters"><ion-icon name="funnel"></ion-icon></ion-button>
+        <ion-button fill="clear" (click)="showHelp()">
+            <ion-icon name="help-circle"></ion-icon>
+        </ion-button>
+    </sei-header>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="filterForm">
+        <ion-card [hidden]="!showFilters">
+            <ion-item-divider color="light"> <h6>Attendees Sorting Options</h6> </ion-item-divider>
+
+            <mat-expansion-panel [expanded]="showFilters">
+                <ion-card>
+                    <ion-radio-group name="wave" formControlName="wave">
+                        <ion-item-divider color="light"> <h6>Wave</h6> </ion-item-divider>
+                        <ion-item>
+                            <ion-label>All</ion-label>
+                            <ion-radio [value]="0"></ion-radio>
+                        </ion-item>
+
+                        <ion-item *ngFor="let wave of waves$ | async">
+                            <ion-label>{{waveLabel}} {{wave}}</ion-label>
+                            <ion-radio [value]="wave"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-card>
+            </mat-expansion-panel>
+        </ion-card>
+    </form>
+    <ng-container *ngIf="loading$ | async; then loading; else loaded"></ng-container>
+    <ng-template #loading>
+        <ion-spinner></ion-spinner>
+    </ng-template>
+    <ng-template #loaded>
+        <ng-container *ngIf="(items$ | async)?.length; else noItems">
+            <ion-item-divider class="actions-bar" color="medium-dark">
+                <ion-button slot="start" class="wave-button" [disabled]="true">{{wave}}</ion-button>
+
+                <ion-button slot="end" color="medium-dark">{{showAgendas ? 'All Events' : 'Review List'}}</ion-button>
+            </ion-item-divider>
+            <ion-slides
+                *ngIf=" dates$ | async as dates; else noItemsToday"
+                [options]="slideOptions"
+                [pager]="true"
+                #slides
+            >
+                <ion-slide *ngFor="let date of dates; let i = index">
+                    <ion-list>
+                        <ion-item-divider>
+                            {{date}}
+                        </ion-item-divider>
+                        <ng-container *ngFor="let item of items$ | async">
+                            <ion-card *ngIf="item.longStartDate === date" class="agenda-event">
+                                <ion-card-content>
+                                    <ion-grid class="ion-no-padding">
+                                        <ion-row class="event-name">
+                                            <ion-icon *ngIf="item.is_featured" color="warning" name="star"></ion-icon>
+                                            {{item.event_name}}
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col class="ion-no-padding ion-text-start">
+                                                <ion-icon name="time"></ion-icon>
+                                                {{item.startTime}}
+                                                <ng-container *ngIf="item.startTime !== item.endTime">
+                                                    to {{item.endTime}}
+                                                </ng-container>
+                                                {{timezone}}
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row *ngIf="item.isPast">
+                                            <ion-col class="ion-no-padding ion-text-start">
+                                                <ion-text color="danger">
+                                                    <ion-icon name="information-circle-outline"></ion-icon>
+                                                    This event has already happened.
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row *ngIf="item.isPrivate">
+                                            <ion-col class="ion-no-padding ion-text-start">
+                                                <ion-text color="danger">
+                                                    <ion-icon name="lock"></ion-icon>
+                                                    This event is private.
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row *ngIf="item.location_id > 0">
+                                            <ion-col class="ion-no-padding ion-text-start">
+                                                <ion-icon name="pin"></ion-icon>
+                                                <ion-text color="secondary">
+                                                    {{item.location_id | locationName | async}}
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+                                </ion-card-content>
+
+                                <ion-item color="light" class="ion-no-padding agenda-item-actions">
+                                    <ion-grid class="ion-no-padding">
+                                        <ion-row class="ion-text-center ion-align-items-center">
+                                            <ion-col class="ion-no-padding">
+                                                <ion-button fill="clear" color="medium-darker">
+                                                    <ion-icon name="add-circle"></ion-icon> Calendar
+                                                </ion-button>
+                                            </ion-col>
+
+                                            <ion-col class="ion-no-padding">
+                                                <ion-button
+                                                    fill="clear"
+                                                    color="medium-darker"
+                                                    [routerLink]="['/agenda', item.event_id]"
+                                                >
+                                                    <ion-icon name="information-circle"></ion-icon> Details
+                                                </ion-button>
+                                            </ion-col>
+
+                                            <ion-col class="ion-no-padding">
+                                                <ion-button
+                                                    [disabled]="!item.location_id"
+                                                    fill="clear"
+                                                    color="medium-darker"
+                                                    [routerLink]="['/locations', item.location_id]"
+                                                >
+                                                    <ion-icon name="pin"></ion-icon> Location
+                                                </ion-button>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+                                </ion-item>
+                            </ion-card>
+                        </ng-container>
+                    </ion-list>
+
+                    <!-- <button (click)="slider.slidePrev()" class="slider-prev-button" [hidden]="i === 0">
+                    <ion-icon size="large" color="light" name="ios-arrow-back"></ion-icon>
+                </button>
+
+                <button
+                    (click)="slider.slideNext()"
+                    [hidden]="i === (dates.length ? dates.length : 0) - 1"
+                    class="slider-next-button"
+                >
+                    <ion-icon size="large" color="light" name="ios-arrow-forward"> </ion-icon>
+                </button> 
+                <img [src]="photo" alt="" tapable (click)="openPreview(photo)" />  -->
+                </ion-slide>
+            </ion-slides>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #noItems>
+        <ion-card>
+            <ion-item-divider color="light">
+                <ion-icon name="calendar" color="danger"></ion-icon>
+                <h6>No Events</h6>
+            </ion-item-divider>
+
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        No events available for the current filters.
+                    </ion-row>
+                    <ion-row>
+                        <ion-button (click)="refresh()"> Refresh</ion-button>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </ng-template>
+
+    <ng-template #noItemsToday>
+        <ion-card>
+            <ion-card-content class="ion-text-center">
+                No Events Today...
+            </ion-card-content>
+        </ion-card>
+    </ng-template>
+</ion-content>

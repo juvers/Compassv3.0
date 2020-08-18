@@ -1,0 +1,27 @@
+<ion-header>
+    <sei-header title="Help" [modalHeader]="true" (close)="close()"></sei-header>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+        <ion-item-divider color="light"> <h6>Getting Started with Locations</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    Tap a location to get more details.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-item-divider color="light"> <h6>No Location Error</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    If locations fail to load, you may have lost internet connection.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,25 @@
+[
+    {
+        "_id": 1,
+        "postFeatured": false,
+        "tags": [{ "_id": 1, "participantName": "Test" }],
+        "likes": [{ "_id": 1, "participantName": "Test" }],
+        "text": "Post content",
+        "participant": {
+            "_id": 1,
+            "participantName": "Test Tester",
+            "groupId": 1,
+            "isAdmin": 2,
+            "participantTitle": "Presenter",
+            "participantTitleRow1": "row1",
+            "participantTitleRow2": "row2",
+            "participant_email_address": "test@test.com",
+            "participant_mobile_phone": "4353345344",
+            "programWave": "2",
+            "registrationStatus": "Completed",
+            "registrationType": "registrationType"
+        },
+        "postContentUpdatedAt": "2020-01-12 20:01:55",
+        "postUpdatedAt": "2020-01-12 20:01:55"
+    }
+]

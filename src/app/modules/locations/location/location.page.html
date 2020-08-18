@@ -1,0 +1,167 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title> Location Details </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ng-container *ngIf="location$ | async as location">
+        <ion-item class="ion-justify-content-center align-items-center ion-text-center" color="secondary" lines="none">
+            <ion-grid>
+                <ion-row>
+                    <ngx-avatar
+                        class="location-avatar "
+                        color="secondary"
+                        [name]="location.location_name"
+                        [round]="true"
+                        [size]="200"
+                        [src]="location.location_photo"
+                    ></ngx-avatar>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-text-center ion-no-padding">
+                        <h2>{{location.location_name}}</h2>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-no-padding">
+                        <div [formGroup]="rateForm">
+                            <rating formControlName="rate" readonly="false" size="default"> </rating>
+                        </div>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="location.rating > 0">
+                    <ion-col>
+                        <ng-container *ngIf="location.count_rating > 0; else: noRatings">
+                            Avg. Rating: {{location.average_rating | number:'1.2-2'}}
+                        </ng-container>
+                        <ng-template #noRatings>
+                            Not yet rated.
+                        </ng-template>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="locationOptions.showLocationRatingAbilityStaticRating && location.hasStaticRating">
+                    <ion-col>
+                        Global Rating: {{location.static_rating | number: '1.2-2'}}
+                    </ion-col>
+                </ion-row>
+                <ion-row
+                    *ngIf="locationOptions.showLocationRatingAbilityStaticValueRating && location.static_value_rating"
+                >
+                    <ion-col>
+                        Value Rating: {{(location.static_value_rating)}}
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="location.location_phone">
+                    <ion-col>
+                        Phone: {{location.location_phone | formatPhoneNumber}}
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf=" location.location_address_street">
+                    <ion-col>
+                        {{location.location_address_street}}
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf=" location.location_address_city">
+                    <ion-col>
+                        {{location.location_address_city}}<ng-container
+                            *ngIf="location.location_address_state || location.location_address_zipcode"
+                            >, {{location.location_address_state}} {{location.location_address_zipcode}}
+                        </ng-container>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="location.location_address_street">
+                    <ion-col class="ion-no-padding">
+                        <ion-button color="positive" expand="block" size="large">
+                            Navigate
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="location.location_phone">
+                    <ion-col class="ion-no-padding">
+                        <ion-button color="positive" expand="block" size="large">
+                            Call
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+        <div class="tab-wrapper">
+            <mat-tab-group headerPosition="above" dynamicHeight>
+                <mat-tab label="Description" [tabIndex]="0">
+                    <ion-card>
+                        <ion-card-content>
+                            {{location.location_description}}
+                        </ion-card-content>
+                    </ion-card>
+                </mat-tab>
+                <mat-tab label="Feed" [tabIndex]="1">
+                    <ion-list>
+                        <ion-card class="inactive" *ngFor="let post of posts$ | async">
+                            <sei-promoted-post *ngIf="post.postFeatured" [post]="post"></sei-promoted-post>
+                            <sei-post *ngIf="!post.postFeatured" [post]="post"></sei-post>
+                        </ion-card>
+                    </ion-list>
+                </mat-tab>
+
+                <mat-tab label="Schedule" [tabIndex]="2">
+                    <ion-list>
+                        <ng-container *ngIf="events$ | async as events; else: noEvents">
+                            <ng-container *ngIf="events?.length; else: noEvents">
+                                <ion-item
+                                    *ngFor="let event of events"
+                                    lines="full"
+                                    button
+                                    [routerLink]="['/agenda', event.event_id]"
+                                >
+                                    <ion-grid>
+                                        <ion-row>
+                                            <ion-col class="event-name">
+                                                {{event.event_name}}
+                                            </ion-col>
+                                        </ion-row>
+
+                                        <ion-row>
+                                            <ion-col>
+                                                {{event.extendedStartDate}}
+                                                <ng-container *ngIf="!event.isMultipleDay">
+                                                    to {{event.extendedEndDate}}
+                                                </ng-container>
+                                            </ion-col>
+                                        </ion-row>
+
+                                        <ion-row *ngIf="event.isPrivate">
+                                            <ion-col>
+                                                <ion-icon name="lock" color="danger"></ion-icon>
+                                                This event is private.
+                                            </ion-col>
+                                        </ion-row>
+                                        <ng-container *ngIf="event.count_attendees > 0">
+                                            <ion-row
+                                                *ngIf="agendaOptions.showAgendaAttendeesCountToAll || (currentUser$ | async)?.roles?.operations "
+                                            >
+                                                <ion-icon name="person"></ion-icon>
+                                                {{event.count_attendees}} Attendees Registered
+                                            </ion-row>
+                                        </ng-container>
+                                    </ion-grid>
+                                </ion-item>
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #noEvents>
+                            <ion-item>
+                                No Schedule yet...
+                            </ion-item>
+                        </ng-template>
+                    </ion-list>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </ng-container>
+</ion-content>

@@ -1,0 +1,6 @@
+{
+    "id": "_id",
+    "port": 4333,
+    "routes": "mock/routes.json",
+    "watch": true
+}

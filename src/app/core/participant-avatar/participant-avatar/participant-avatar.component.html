@@ -1,0 +1,7 @@
+<ngx-avatar
+    (click)="goToParticipant()"
+    [name]="participant?.participantName"
+    [round]="true"
+    [size]="actualSize"
+    [src]="participantPhotos$ | async | chooseImage"
+></ngx-avatar>

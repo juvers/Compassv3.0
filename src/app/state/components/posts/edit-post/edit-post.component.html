@@ -1,0 +1,207 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button fill="clear" (click)="close()">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title> Post </ion-title>
+        <ion-buttons slot="end">
+            <ion-button
+                fill="clear"
+                *ngIf="isPostFromCurrentUser$ | async"
+                [disabled]="postForm.invalid"
+                (click)="submitPost()"
+            >
+                Save
+            </ion-button>
+            <!-- This code is translated from the old compass but now it's disabled as the old app does not show the edit button -->
+            <!-- <ion-button
+                fill="clear"
+                *ngIf="!isPostFromCurrentUser$ | async"
+                [disabled]="postForm.invalid"
+                (click)="isEdit = true"
+            >
+                Edit
+            </ion-button> -->
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item lines="none" class="post-header" *ngIf="!isCreate">
+        <sei-participant-avatar
+            slot="start"
+            [participant]="postParticipant$ | async"
+            (click)="close()"
+        ></sei-participant-avatar>
+
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    {{ post.participant?.participantName }}
+                    <ng-container *ngIf="(following$ | async) && !(isPostFromCurrentUser$ | async)">
+                        -
+                        <ion-text color="primary" (click)="showFollowingOptions()">
+                            Following
+                        </ion-text>
+                    </ng-container>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    {{ post.postContentUpdatedAt | amTimeAgo }}
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col> </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-item>
+    <form [formGroup]="postForm">
+        <ion-item class="textarea-item" *ngIf="isPostFromCurrentUser$ | async">
+            <ion-textarea [rows]="7" formControlName="content"></ion-textarea>
+        </ion-item>
+
+        <ion-item lines="none" *ngIf="!isPostFromCurrentUser$ | async" [innerHtml]="post.text | hrefToJs"> </ion-item>
+
+        <ion-item *ngIf="post.tags?.length" lines="none">
+            <sei-post-tags [post]="post"></sei-post-tags>
+        </ion-item>
+        <ion-item *ngIf="post.likes?.length" class="post-likes" lines="none">
+            <sei-post-likes [post]="post"></sei-post-likes>
+        </ion-item>
+
+        <ng-container *ngIf="isPostFromCurrentUser$ | async">
+            <ion-card *ngIf="showSettings$ | async">
+                <ion-item-divider color="light">
+                    <h6>
+                        Settings
+                    </h6>
+                </ion-item-divider>
+
+                <ion-card-content>
+                    <ion-item lines="none">
+                        <ion-label>
+                            Promoted Post
+                            <p *ngIf="(currentUser$ | async)?.roles.administrator">
+                                <ion-icon name="unlock"></ion-icon>
+                                Unlocked for Admins
+                            </p>
+                        </ion-label>
+                        <ion-toggle formControlName="postFeatured"> </ion-toggle>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-label>
+                            Template
+                        </ion-label>
+
+                        <ion-select
+                            name="postTemplate"
+                            formControlName="postTemplate"
+                            interface="action-sheet"
+                            placeholder="Select One"
+                        >
+                            <ion-select-option [value]="item.id" *ngFor="let item of postTemplates">
+                                {{ item.label }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-card-content>
+            </ion-card>
+        </ng-container>
+    </form>
+
+    <sei-post-images [post]="post" [isEdit]="isEdit" [showSlider]="true"></sei-post-images>
+    <ng-container *ngIf="!isCreate">
+        <ion-item-divider color="light">
+            <h6>
+                Comments
+            </h6>
+        </ion-item-divider>
+        <form [formGroup]="commentForm">
+            <ion-item class="textarea-item textarea-comment" *ngIf="isPostFromCurrentUser$ | async">
+                <ion-textarea placeholder="Write a comment..." [rows]="1" formControlName="comment"></ion-textarea>
+                <ion-button fill="clear" slot="end" (click)="sendComment()" [disabled]="commentForm.invalid">
+                    <ion-icon size="large" name="ios-send"></ion-icon>
+                </ion-button>
+            </ion-item>
+        </form>
+
+        <ng-container>
+            <ng-container *ngIf="comments$ | async as comments; else noComments">
+                <ion-card *ngFor="let comment of comments">
+                    <ion-grid class="ion-no-padding">
+                        <ion-row class="ion-no-padding">
+                            <ion-item lines="none" class="post-header">
+                                <ngx-avatar
+                                    slot="start"
+                                    (click)="goToParticipant()"
+                                    [name]="post.participant?.participantName"
+                                    [round]="true"
+                                    [src]="
+                                        [
+                                            comment.participant.participantPhotoThumbnail,
+                                            comment.participant.participantPhotoOptimized,
+                                            comment.participant.participantPhoto
+                                        ] | chooseImage
+                                    "
+                                ></ngx-avatar>
+                                <ion-grid>
+                                    <ion-row>
+                                        <ion-col>
+                                            {{ post.participant?.participantName }}
+                                            <ng-container *ngIf="following$ | async">
+                                                -
+                                                <ion-text color="primary" (click)="showFollowingOptions()">
+                                                    Following
+                                                </ion-text>
+                                            </ng-container>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            {{ verbiageProgramWave }} {{ (participant$ | async)?.programWave }} -
+                                            {{ comment.createdAt | amTimeAgo }}
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col> </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+                            </ion-item>
+                        </ion-row>
+                        <ion-row>
+                            <ion-item lines="none" [innerHtml]="comment.text | hrefToJs"> </ion-item>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card>
+                <ng-container *ngIf="!comments?.length; then noComments"></ng-container>
+            </ng-container>
+            <ng-template #noComments>
+                <ion-item lines="full">
+                    No comments yet...
+                </ion-item>
+            </ng-template>
+        </ng-container>
+    </ng-container>
+</ion-content>
+<ion-footer *ngIf="isEdit || post?.participant?._id === (currentUser$ | async)?._id">
+    <ion-grid class="ion-no-padding">
+        <ion-row class="ion-justify-content-center">
+            <ion-button fill="clear" size="large" (click)="takePhoto()">
+                <ion-icon name="camera"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="large" (click)="selectImages()">
+                <ion-icon name="images"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="large" (click)="openList('Tag', post.tags)">
+                <ion-icon name="person"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="large" (click)="goToLocation()">
+                <ion-icon name="pin"></ion-icon>
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

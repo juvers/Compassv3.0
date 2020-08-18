@@ -1,0 +1,229 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title> Agenda Details </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content color="secondary">
+    <ng-container *ngIf="event$ | async as item">
+        <ion-item
+            class="ion-justify-content-center align-items-center ion-text-center event-header-bar"
+            color="secondary"
+            lines="none"
+        >
+            <ion-grid class="ion-text-center  ion-no-padding">
+                <ion-row>
+                    <ion-col class="ion-no-padding event-calendar">
+                        <ion-icon name="ios-calendar"></ion-icon>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-text-center ion-no-padding">
+                        <h2>{{item.event_name}}</h2>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-text-center  ion-no-padding">
+                        {{item.longStartDate}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-text-center  ion-no-padding">
+                        {{item.startTime}}
+                        <ng-container *ngIf="item.startTime !== item.endTime">
+                            to {{item.endTime}}
+                        </ng-container>
+                        {{timezone}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-no-padding">
+                        <div [formGroup]="rateForm">
+                            <rating formControlName="rate" readonly="false" size="default"> </rating>
+                        </div>
+
+                        <div *ngIf="item.rating > 0" class="item-rating">
+                            <ng-container *ngIf="item.count_rating > 0; else notRated">
+                                Avg. Rating: {{item.average_rating|number:'1.2-2'}} from {{item.count_rating}} Ratings
+                            </ng-container>
+                            <ng-template #notRated>
+                                Not yet rated.
+                            </ng-template>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+        <div class="event-description-header">
+            <mat-tab-group headerPosition="above" dynamicHeight>
+                <mat-tab label="Description" [tabIndex]="0">
+                    <ion-item lines="full" [innerHtml]="item.event_description | hrefToJs"> </ion-item>
+                </mat-tab>
+                <mat-tab label="Location" [tabIndex]="1">
+                    <ion-item lines="full">
+                        <ng-container *ngIf="location$ | async as location; else: noLocation">
+                            <ngx-avatar
+                                class="location-avatar"
+                                [name]="location.location_name"
+                                [round]="true"
+                                [size]="50"
+                                [src]="location.location_photo"
+                            ></ngx-avatar>
+                            <ion-grid class="location-grid">
+                                <ion-row>
+                                    <ion-col class="location-name">
+                                        {{location.location_name}}
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        {{location.location_address_street}}
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        {{location.location_address_city}}, {{location.location_address_state}}
+                                        {{location.location_address_zipcode}}
+                                    </ion-col>
+                                </ion-row>
+                                <!-- TODO: NOW: navigator -->
+                                <ion-row *ngIf="location.location_address_street">
+                                    <ion-col class="ion-no-padding nav-col">
+                                        <ion-button
+                                            color="positive"
+                                            expand="block"
+                                            size="large"
+                                            (click)="navigate(location)"
+                                        >
+                                            <ion-icon name="navigate"></ion-icon>
+                                            Navigate
+                                        </ion-button>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col class="ion-no-padding">
+                                        <ion-button
+                                            color="positive"
+                                            expand="block"
+                                            size="large"
+                                            [routerLink]="['/locations', location.location_id]"
+                                        >
+                                            <ion-icon name="information-circle"></ion-icon>
+                                            Location Details
+                                        </ion-button>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ng-container>
+                        <ng-template #noLocation> No location information available... </ng-template>
+                    </ion-item>
+                </mat-tab>
+
+                <mat-tab label="Attendees" [tabIndex]="1">
+                    <ion-list class="ion-no-padding">
+                        <ng-container *ngIf="participants$ | async as participants; else: noParticipants">
+                            <ion-item class="filter-participants" [formGroup]="filterParticipantForm">
+                                <ion-searchbar formControlName="search" placeholder="Search"></ion-searchbar>
+                                <ng-container *ngIf="participants?.length">
+                                    {{participants?.length}}/{{participantCount$ | async}}
+                                </ng-container>
+                            </ion-item>
+                            <ion-item lines="full" (click)="refreshParticipants()" button>
+                                <ion-icon name="refresh" slot="start" class="refresh-participants"></ion-icon>
+                                Refresh Data
+                            </ion-item>
+                            <ion-item
+                                class="event-participants"
+                                *ngFor="let participant of participants$ | async"
+                                lines="full"
+                            >
+                                <ion-grid class="ion-no-padding">
+                                    <ion-row>
+                                        <ion-col size="auto">
+                                            <sei-participant-avatar
+                                                [participant]="participant"
+                                            ></sei-participant-avatar>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-grid class="ion-no-padding event-participant-description">
+                                                <ion-row>
+                                                    <ion-col>
+                                                        {{participant.participantName}}
+                                                    </ion-col>
+                                                </ion-row>
+
+                                                <ion-row>
+                                                    <!-- TODO: A7 - devices attendees_devices/deviceCanNotify/findAllDevices -->
+                                                    <!-- <span ng-show="$root.me.isAdmin >= 1 && person.deviceCanNotify == 1">
+                                            <i class="icon ion-iphone"></i>
+                                        </span> -->
+                                                    <ion-col>
+                                                        <ion-text color="medium-dark">
+                                                            {{participant.participantTitle || 'Attendee'}}
+                                                            <!-- TODO: test example -->
+                                                            <ng-container *ngIf="participant.guest">Guest</ng-container>
+                                                        </ion-text>
+                                                    </ion-col>
+                                                </ion-row>
+                                            </ion-grid>
+                                        </ion-col>
+                                    </ion-row>
+
+                                    <ion-row>
+                                        <ion-col class="ion-no-padding">
+                                            <ion-button
+                                                (click)="scanIn(participant._id)"
+                                                fill="clear"
+                                                expand="block"
+                                                class="ion-no-padding attendee-button"
+                                            >
+                                                <ion-icon color="success" name="add-circle"></ion-icon>
+                                                <ion-label>
+                                                    Scan In
+                                                </ion-label>
+                                            </ion-button>
+                                        </ion-col>
+                                        <ion-col class="ion-no-padding">
+                                            <ion-button
+                                                (click)="scanOut(participant._id)"
+                                                fill="clear"
+                                                expand="block"
+                                                class="ion-no-padding attendee-button"
+                                            >
+                                                <ion-icon color="danger" name="add-circle"></ion-icon>
+                                                <ion-label class="attendee-button-text">
+                                                    Scan Out
+                                                </ion-label>
+                                            </ion-button>
+                                        </ion-col>
+                                        <ion-col class="ion-no-padding">
+                                            <ion-button
+                                                [routerLink]="['/attendees', participant._id]"
+                                                fill="clear"
+                                                expand="block"
+                                                class="ion-no-padding attendee-button"
+                                            >
+                                                <ion-icon color="success" name="checkmark-circle"></ion-icon>
+                                                <ion-label>
+                                                    Profile
+                                                </ion-label>
+                                            </ion-button>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+                            </ion-item>
+                        </ng-container>
+                        <ng-template #noParticipants>
+                            <ion-item>
+                                <!-- TODO: NOW -->
+                            </ion-item>
+                        </ng-template>
+                    </ion-list>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </ng-container>
+</ion-content>

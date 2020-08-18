@@ -1,0 +1,9 @@
+<ion-toolbar [class.modal-toolbar]="modalHeader">
+    <ion-buttons slot="start" *ngIf="showMenu"> <ion-menu-button></ion-menu-button> </ion-buttons>
+    <ion-title> {{ title }} </ion-title>
+    <ion-buttons slot="end">
+        <ng-content></ng-content>
+
+        <ion-button *ngIf="showClose" fill="clear" size="small" (click)="emitClose()">Close</ion-button>
+    </ion-buttons>
+</ion-toolbar>

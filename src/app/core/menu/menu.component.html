@@ -1,0 +1,98 @@
+<ion-header>
+    <ion-toolbar color="primary" class="ion-text-left"> <img [src]="headerImage" /> </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-menu-toggle auto-hide="false">
+            <ion-item *ngIf="currentUser$ | async as currentUser" color="medium-darker">
+                <div class="menu-avatar-wrapper">
+                    <ngx-avatar
+                        [name]="currentUser.participantName"
+                        size="50"
+                        [src]="photos$ | async | chooseImage"
+                        [round]="true"
+                    >
+                    </ngx-avatar>
+                </div>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            {{ currentUser.participantName }}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            View Profile
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col> {{ verbiageProgramWave }}: {{ currentUser.programWave }} </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="currentUser?.roles?.operations">
+                        <ion-col>
+                            Account Type:
+                            <ng-container [ngSwitch]="currentUser.isAdmin">
+                                <ng-container *ngSwitchCase="1"> Operations </ng-container>
+                                <ng-container *ngSwitchCase="2"> Admin </ng-container>
+                                <ng-container *ngSwitchCase="3"> Developer </ng-container>
+                            </ng-container>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item color="light" class="menu-leaderboard ion-no-padding" *ngIf="!disableLeaderboard">
+                                TODO: Leaderboard
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+            <ion-item
+                *ngIf="isAuthenticated$ | async"
+                class="item-divider item-borderless tabs tabs-secondary tabs-icon-left"
+            >
+                <ion-col>
+                    <a (click)="editProfile()" menu-close class="tab-item">
+                        <i class="icon ion-gear-a"></i> Settings
+                    </a>
+                </ion-col>
+
+                <ion-col>
+                    <a routerLink="/badge" menu-close *ngIf="!disableDigitalBadge" class="tab-item">
+                        <i class="icon ion-qr-scanner"></i> Badge
+                    </a>
+                </ion-col>
+            </ion-item>
+            <ng-container *ngFor="let item of menuItems">
+                <ion-item
+                    [className]="item.class ? item.class : 'sei-menu-item'"
+                    [detail]="false"
+                    (click)="clickItem(item)"
+                    *ngIf="isItemVisible(item) | async"
+                    button
+                >
+                    <ion-col size="2" class="ion-text-center">
+                        <div class="menu-icon-wrapper">
+                            <div
+                                [matBadge]="getBadge(item, true) | async"
+                                [matBadgeColor]="item.badge ? 'warn' : null"
+                                [matBadgeSize]="item.badge ? 'small' : null"
+                            >
+                                <ion-icon
+                                    [name]="getIconName(item)"
+                                    [src]="getIconSrc(item)"
+                                    [class.large-menu-icon]="item.largeIcon"
+                                    color="primary"
+                                ></ion-icon>
+                            </div>
+                        </div>
+                    </ion-col>
+                    <ion-col class="menu-item-title"> {{ item.title }} </ion-col>
+                    <ion-badge *ngIf="!useFloatingBadges" color="danger">{{ getBadge(item) | async }}</ion-badge>
+                </ion-item>
+            </ng-container>
+            <ion-item class="item-end"></ion-item>
+            <ion-item class="item-end"></ion-item>
+        </ion-menu-toggle>
+    </ion-list>
+</ion-content>

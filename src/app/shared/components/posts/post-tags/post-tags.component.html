@@ -1,0 +1,15 @@
+
+<ng-container *ngIf="post.tags?.length">
+  - with
+  <ng-container *ngFor="let tag of post?.tags; index as i; first as f; last as l">
+      <ng-container *ngIf="!f && !l && i < 2">,</ng-container>
+      <ng-container *ngIf="l && i != 0 && i <= 2">and</ng-container>
+      <ng-container *ngIf="l && i > 2">
+          and <a (click)="openList('Tag', post.tags)"> {{ post.tags.length - 2 }} others</a>
+      </ng-container>
+
+      <a (click)="goToParticipant(tag._id)" *ngIf="i <= 3">
+          {{ tag.participantName }}
+      </a>
+  </ng-container>
+</ng-container>

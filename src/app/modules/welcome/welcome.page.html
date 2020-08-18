@@ -1,0 +1,43 @@
+<ion-header>
+    <sei-header title="Welcome"></sei-header>
+</ion-header>
+
+<ion-content>
+    <ion-slides [options]="slideOptions">
+        <ion-slide *ngFor="let item of config.items">
+            <img
+                *ngIf="item.background || config.background"
+                class="slide-background"
+                [style.opacity]="item.opacity || config.opacity || 1 "
+                [src]="item.background || config.background"
+            />
+            <ng-container *ngIf="item.content || config.content as itemContent">
+                <ng-container [ngSwitch]="itemContent.type">
+                    <div
+                        *ngSwitchCase="'image'"
+                        class="slide-content slide-image"
+                        [ngClass]="getItemClasses(item)"
+                        [ngStyle]="getItemStyles(item)"
+                    >
+                        <img [src]="itemContent.data" />
+                    </div>
+                    <div
+                        *ngSwitchCase="'text'"
+                        class="slide-content slide-text"
+                        [ngClass]="getItemClasses(item)"
+                        [ngStyle]="getItemStyles(item)"
+                    >
+                        {{itemContent.data}}
+                    </div>
+                    <div
+                        *ngSwitchCase="'html'"
+                        class="slide-content slide-html"
+                        [ngClass]="getItemClasses(item)"
+                        [ngStyle]="getItemStyles(item)"
+                        [innerHTML]="itemContent.data"
+                    ></div>
+                </ng-container>
+            </ng-container>
+        </ion-slide>
+    </ion-slides>
+</ion-content>

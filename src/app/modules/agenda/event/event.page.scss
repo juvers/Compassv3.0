@@ -1,0 +1,64 @@
+.attendee-button {
+    font-size: 16px;
+    width: 100%;
+    text-transform: capitalize;
+    ion-label {
+        color: var(--ion-color-medium-darker);
+        padding-left: 4px;
+    }
+}
+
+.location-name {
+    color: var(--ion-color-dark-shade);
+    font-size: 16px;
+}
+
+.event-participants {
+    --padding-bottom: 8px;
+    --padding-top: 8px;
+    sei-participant-avatar {
+        height: 100%;
+        ngx-avatar {
+            height: 100% !important;
+            margin-top: 16px;
+            margin-right: 4px;
+        }
+    }
+    .event-participant-description {
+        ion-col {
+            padding-top: 0px;
+            --padding-top: 0px;
+        }
+    }
+}
+
+.refresh-participants {
+    margin-inline-end: 16px;
+    color: var(--ion-color-primary);
+}
+
+.event-calendar {
+    font-size: 124px;
+    margin-top: 16px;
+}
+
+.event-header-bar {
+    padding-bottom: 16px;
+}
+
+.event-description-header {
+    background: white;
+    height: 100%;
+}
+
+.filter-participants {
+    --padding-start: 8px;
+}
+
+.item-rating {
+    display: block;
+}
+
+.nav-col {
+    margin-top: 12px;
+}

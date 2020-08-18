@@ -1,0 +1,31 @@
+.image-actions {
+    border-top: 1px solid var(--ion-color-medium-tint);
+    margin-top: 16px;
+    ion-button {
+        color: var(--ion-color-medium-tint);
+        text-transform: none;
+        ion-icon {
+            color: var(--ion-color-medium-tint);
+            font-size: 24px;
+            margin-right: 4px;
+        }
+    }
+}
+
+.profile-header {
+    margin: 0 auto;
+    ion-button {
+        margin-top: -72px;
+    }
+}
+
+ion-card {
+    width: 100%;
+}
+
+.animation-promoted-post {
+    position: absolute;
+    top: 64px;
+    left: 50%;
+    margin-left: -50px;
+}

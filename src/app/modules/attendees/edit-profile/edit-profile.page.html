@@ -1,0 +1,82 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title> Edit Profile </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ng-container *ngIf="participant$ | async as participant">
+        <ion-item class="ion-justify-content-center align-items-center ion-text-center" color="secondary" lines="none">
+            <ion-grid>
+                <ion-row>
+                    <div class="profile-header">
+                        <ng-container *ngIf="photo$ | async as participantPhoto; else noPhoto">
+                            <ngx-avatar
+                                [name]="participant?.participantName"
+                                [round]="true"
+                                [size]="200"
+                                [src]="participantPhoto"
+                            ></ngx-avatar>
+                        </ng-container>
+                        <ng-template #noPhoto>
+                            <ngx-avatar [name]="participant?.participantName" [round]="true" [size]="200"></ngx-avatar>
+                        </ng-template>
+                        <ion-button color="light" *ngIf="isNewPhoto" (click)="revertPhoto()">
+                            Cancel
+                        </ion-button>
+                    </div>
+                </ion-row>
+                <ion-row class="image-actions">
+                    <ion-col>
+                        <ion-button fill="clear" (click)="takePhoto()">
+                            <ion-icon name="camera"></ion-icon> Capture
+                        </ion-button>
+                    </ion-col>
+                    <ion-col>
+                        <ion-button fill="clear" (click)="selectImages()">
+                            <ion-icon name="images"></ion-icon> Upload
+                        </ion-button>
+                    </ion-col>
+                    <ion-col>
+                        <ion-button fill="clear" (click)="removePhoto()">
+                            <ion-icon name="ios-trash"></ion-icon> Delete
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-text-center ion-no-padding">
+                        <h2>{{participant.participantName}}</h2>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+        <ion-grid>
+            <ion-row>
+                <ion-card>
+                    <ion-item-divider color="light">
+                        Account
+                    </ion-item-divider>
+                    <ion-item>
+                        <ion-label position="floating"> Change Password </ion-label>
+                        <ion-input type="password"></ion-input>
+                    </ion-item>
+                </ion-card>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-button (click)="save()" expand="block"> Save </ion-button>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-button [routerLink]="['/attendees', attendeeId]" expand="block"> View Profile </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ng-container>
+</ion-content>

@@ -1,0 +1,109 @@
+<ion-header>
+    <sei-header title="Activity Feed">
+        <ion-button fill="clear" (click)="newPost()">
+            <ion-icon name="md-create"></ion-icon>
+        </ion-button>
+        <ion-button (click)="showFilters = !showFilters"><ion-icon name="funnel"></ion-icon></ion-button>
+        <ion-button fill="clear" (click)="showHelp()">
+            <ion-icon name="help-circle"></ion-icon>
+        </ion-button>
+    </sei-header>
+</ion-header>
+
+<ng-template #newPostTemplate>
+    <ion-card>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="auto">
+                    <ngx-avatar
+                        [name]="(currentUser$ | async)?.participantName"
+                        size="50"
+                        [src]="photos$ | async | chooseImage"
+                        [round]="true"
+                    >
+                    </ngx-avatar>
+                </ion-col>
+                <ion-col>
+                    <ion-item>
+                        <ion-input
+                            color="medium-dark"
+                            placeholder="What's on your mind?"
+                            (ionFocus)="newPost()"
+                        ></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
+</ng-template>
+
+<ion-content class="header-filter-title">
+    <form [formGroup]="filterForm">
+        <ion-card [hidden]="!showFilters">
+            <ion-item-divider color="light"> <h6>Attendees Sorting Options</h6> </ion-item-divider>
+
+            <mat-expansion-panel [expanded]="showFilters">
+                <ion-card>
+                    <ion-radio-group name="wave" formControlName="wave">
+                        <ion-item-divider color="light"> <h6>Wave</h6> </ion-item-divider>
+                        <ion-item>
+                            <ion-label>All</ion-label>
+                            <ion-radio [value]="0"></ion-radio>
+                        </ion-item>
+
+                        <ion-item *ngFor="let wave of waves$ | async">
+                            <ion-label>{{waveLabel}} {{wave}}</ion-label>
+                            <ion-radio [value]="wave"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-card>
+            </mat-expansion-panel>
+        </ion-card>
+    </form>
+    <mat-tab-group headerPosition="below" (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="Everyone" [tabIndex]="0">
+            <ion-content *ngIf="!showOnlyFollowing">
+                <ion-list>
+                    <ng-container *ngTemplateOutlet="newPostTemplate"></ng-container>
+
+                    <ion-card> Leaderboard - TODO </ion-card>
+                    <ion-card class="inactive" *ngFor="let post of posts$ | async">
+                        <sei-promoted-post *ngIf="post.postFeatured" [post]="post"></sei-promoted-post>
+                        <sei-post *ngIf="!post.postFeatured" [post]="post"></sei-post>
+                    </ion-card>
+                    <ion-card *ngIf="finishedLoading"> No More Posts...</ion-card>
+                    <ion-infinite-scroll
+                        threshold="100px"
+                        (ionInfinite)="loadMore($event)"
+                        [disabled]="finishedLoading"
+                    >
+                        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+                        </ion-infinite-scroll-content>
+                    </ion-infinite-scroll>
+                </ion-list>
+            </ion-content>
+        </mat-tab>
+        <mat-tab label="Following" [tabIndex]="1">
+            <ion-content>
+                <ion-list *ngIf="showOnlyFollowing">
+                    <ng-container *ngTemplateOutlet="newPostTemplate"></ng-container>
+
+                    <ion-card> Leaderboard - TODO </ion-card>
+                    <ion-card class="inactive" *ngFor="let post of following$ | async">
+                        <sei-promoted-post *ngIf="post.postFeatured" [post]="post"></sei-promoted-post>
+                        <sei-post *ngIf="!post.postFeatured" [post]="post"></sei-post>
+                    </ion-card>
+                    <ion-card *ngIf="finishedLoading"> No More Posts...</ion-card>
+                    <ion-infinite-scroll
+                        threshold="100px"
+                        (ionInfinite)="loadMore($event)"
+                        [disabled]="finishedLoading"
+                    >
+                        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+                        </ion-infinite-scroll-content>
+                    </ion-infinite-scroll>
+                </ion-list>
+            </ion-content>
+        </mat-tab>
+    </mat-tab-group>
+</ion-content>

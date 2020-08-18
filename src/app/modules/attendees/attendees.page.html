@@ -1,0 +1,120 @@
+<ion-header>
+    <sei-header title="Attendees">
+        <ion-button (click)="showFilters = !showFilters"><ion-icon name="funnel"></ion-icon></ion-button>
+        <ion-button fill="clear" (click)="showHelp()">
+            <ion-icon name="help-circle"></ion-icon>
+        </ion-button>
+    </sei-header>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="filterForm">
+        <ion-card [hidden]="!showFilters">
+            <ion-item-divider> <h6>Attendees Sorting Options</h6> </ion-item-divider>
+
+            <mat-expansion-panel [expanded]="showFilters">
+                <ion-card>
+                    <ion-radio-group name="sortBy">
+                        <ion-item-divider> <h6>Sort By</h6> </ion-item-divider>
+                        <ion-item>
+                            <ion-label>First Name</ion-label>
+                            <ion-radio value="first"></ion-radio>
+                        </ion-item>
+
+                        <ion-item>
+                            <ion-label>Last Name</ion-label>
+                            <ion-radio value="last" checked></ion-radio>
+                        </ion-item>
+
+                        <ion-item>
+                            <ion-label>Leaderboard</ion-label>
+                            <ion-radio value="leaderboard"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-card>
+
+                <ion-card>
+                    <ion-radio-group name="wave" formControlName="wave">
+                        <ion-item-divider> <h6>Wave</h6> </ion-item-divider>
+                        <ion-item>
+                            <ion-label>All</ion-label>
+                            <ion-radio [value]="0"></ion-radio>
+                        </ion-item>
+
+                        <ion-item *ngFor="let wave of waves$ | async">
+                            <ion-label>{{waveLabel}} {{wave}}</ion-label>
+                            <ion-radio [value]="wave"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-card>
+
+                <ion-card>
+                    <ion-item-divider> <h6>Filter Options</h6> </ion-item-divider>
+                    <ion-item>
+                        <ion-label>Hide Guest</ion-label>
+                        <ion-checkbox formControlName="hideGuest"></ion-checkbox>
+                    </ion-item>
+                </ion-card>
+            </mat-expansion-panel>
+        </ion-card>
+
+        <ion-item>
+            <ion-searchbar formControlName="search" placeholder="Search"></ion-searchbar>
+            <ng-container *ngIf="filteredCount$">
+                {{filteredCount$ | async}}/{{participantCount$ | async}}
+            </ng-container>
+            <!-- TODO: A7 - admin stats modal -->
+        </ion-item>
+
+        <ion-list>
+            <ng-container *ngIf="attendees$ | async as attendees;">
+                <ion-item *ngFor="let  attendee of  attendees" [routerLink]="['/attendees', attendee._id]" lines="full">
+                    <sei-participant-avatar slot="start" [participant]="attendee"></sei-participant-avatar>
+                    <ion-grid>
+                        <ion-row>
+                            {{attendee.participantName}}
+                        </ion-row>
+
+                        <ion-row>
+                            <!-- TODO: A7 devices attendees_devices/deviceCanNotify/findAllDevices -->
+                            <!-- <span ng-show="$root.me.isAdmin >= 1 && person.deviceCanNotify == 1">
+                            <i class="icon ion-iphone"></i>
+                        </span> -->
+
+                            {{attendee.participantTitle || 'Attendee'}}
+                            <ng-container *ngIf="attendee.guest">Guest</ng-container>
+                            <ng-container *ngIf="attendee.programWave">
+                                {{waveLabel}}: {{attendee.programWave | formatWave}}
+                            </ng-container>
+                        </ion-row>
+
+                        <ion-row>
+                            {{attendee.participantTitleRow1}}
+                        </ion-row>
+
+                        <ion-row>
+                            {{attendee.participantTitleRow2}}
+                        </ion-row>
+
+                        <ion-row *ngIf="attendee.participantTitleRow3">
+                            {{attendee.participantTitleRow3}}
+                        </ion-row>
+
+                        <ion-row *ngIf="attendee.participantTitleRow3">
+                            {{attendee.participantTitleRow3}}
+                        </ion-row>
+
+                        <!-- TODO: leaderboard -->
+                        <!-- <ion-row *ngIf="isLeaderboardSelected">
+                        {{attendee.leaderboard_points}}
+                    </ion-row>
+                    isLeaderboardSelected -->
+                    </ion-grid>
+                </ion-item>
+                <ion-item *ngIf="!attendees.length">
+                    No Attendees yet...
+                </ion-item>
+            </ng-container>
+        </ion-list>
+    </form>
+</ion-content>

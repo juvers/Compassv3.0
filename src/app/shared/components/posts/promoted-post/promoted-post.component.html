@@ -1,0 +1,98 @@
+<div
+    [class.promoted-post]="post.postTemplate !== 0"
+    [class.has-pulse]="post.postTemplate === 3 || post.postTemplate === 4"
+>
+    <ion-item-divider color="light">
+        <h6>Promoted Post</h6>
+        <ion-button slot="end" fill="clear" (click)="showOptions()" class="post-options-button ion-float-end">
+            <ion-icon size="small" name="ios-arrow-down"></ion-icon>
+        </ion-button>
+    </ion-item-divider>
+    <!-- <ng-container *ngIf="post.postTemplate === 0">
+        <ion-card-content class="post-text" [innerHtml]="post.text | hrefToJs"></ion-card-content>
+    </ng-container> -->
+    <!-- Stye attributes required for animation  -->
+    <ng-template #alertDot>
+        <div
+            [hidden]="!pulseAnimation"
+            [@fadeOutCircle]="pulseAnimation"
+            (@fadeOutCircle.done)="pulse()"
+            class="ion-text-center"
+            style="position: absolute; top: 64px; left: 50%; margin-left: -50px;"
+        >
+            <div
+                class="ion-text-center"
+                [@zoomIn]="pulseAnimation"
+                style="border: 10px solid #fff601; border-radius: 300px; width: 100px; height:100px"
+            ></div>
+        </div>
+    </ng-template>
+    <ng-template #promotedPostHeader>
+        <ion-card-header *ngIf="post.tags?.length === 1">
+            <ion-grid class="promoted-post-birthday-grid">
+                <ion-row>
+                    <ion-col>
+                        <ngx-avatar
+                            (click)="goToParticipant()"
+                            [name]="post.tags[0].participantName"
+                            [round]="true"
+                            [src]="participantPhotos$ | async | chooseImage"
+                            class="center-element"
+                            size="50"
+                        >
+                        </ngx-avatar>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col (click)="goToParticipant()">
+                        <ion-text color="tertiary">
+                            {{ post.tags[0].participantName }}
+                        </ion-text>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="post.location > 0">
+                    <ion-col>
+                        <sei-location [id]="post.location"></sei-location>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-header>
+    </ng-template>
+
+    <ng-container *ngIf="post.postTemplate === 1">
+        <ngx-confetti [options]="confettiOptions"></ngx-confetti>
+        <ion-card-title class="ion-text-center ion-padding-top ion-margin-top">
+            Happy Birthday!
+        </ion-card-title>
+    </ng-container>
+    <ng-container *ngIf="post.postTemplate === 2">
+        <ngx-confetti [options]="confettiOptions"></ngx-confetti>
+        <ion-card-title class="ion-text-center ion-padding-top ion-margin-top">
+            WINNER!
+        </ion-card-title>
+    </ng-container>
+    <ng-container *ngIf="post.postTemplate === 3">
+        <ng-container *ngTemplateOutlet="alertDot"></ng-container>
+
+        <ion-card-title class="ion-text-center ion-padding-top ion-margin-top">
+            Alert!
+        </ion-card-title>
+    </ng-container>
+    <ng-container *ngIf="post.postTemplate === 4">
+        <ng-container *ngTemplateOutlet="alertDot"></ng-container>
+
+        <ion-card-title class="ion-text-center ion-padding-top ion-margin-top">
+            Agenda Update
+        </ion-card-title>
+    </ng-container>
+    <ng-container *ngTemplateOutlet="promotedPostHeader"></ng-container>
+
+    <ion-card-content
+        class="post-text"
+        [innerHtml]="post.text | hrefToJs"
+        [class.ion-text-center]="post.postTemplate !== 0"
+    ></ion-card-content>
+
+    <sei-post-images [post]="post"></sei-post-images>
+</div>

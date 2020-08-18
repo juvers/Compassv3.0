@@ -1,0 +1,28 @@
+ion-slides {
+    height: 100%;
+    ion-slide {
+        height: 100%;
+        .slide-background {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            bottom: 45%;
+            max-height: 70%;
+            padding: 12px;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+        }
+
+        .slide-text {
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            line-height: 120%;
+            text-shadow: 2px 2px 5px #000, -1px -1px 1px #000, 1px -1px 2px #000, -1px 1px 2px #000, 1px 1px 2px #000;
+        }
+    }
+}

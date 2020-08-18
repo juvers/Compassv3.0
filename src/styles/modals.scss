@@ -1,0 +1,24 @@
+.post-images-modal-css {
+    padding-top: 50% !important;
+    .modal-wrapper {
+        display: block;
+        width: 90% !important;
+        background: transparent !important;
+        ion-content {
+            --background: transparent !important;
+            background: transparent !important;
+            --overflow: hidden;
+            ion-item {
+                --border-radius: 8px;
+            }
+            .modal-image-content {
+                border-radius: 8px !important;
+                background: transparent;
+            }
+
+            .images-footer {
+                height: 100%;
+            }
+        }
+    }
+}

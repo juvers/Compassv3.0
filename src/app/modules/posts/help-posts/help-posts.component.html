@@ -1,0 +1,31 @@
+<ion-header>
+    <sei-header title="Help" [modalHeader]="true" (close)="close()"></sei-header>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+        <ion-item-divider color="light"> <h6>Getting Started with Activity Feed</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    Share your experience by using the Activity Feed. Tap the
+                    <ion-icon name="md-create"></ion-icon> Pencil icon to create a new post. By default, all posts will
+                    but if you re following other attendees, you can tap "Following" to only see posts from other
+                    attendees you are following.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-item-divider color="light"> <h6>No Posts Error</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    If events fail to load, first try swiping down to refresh the page. If you see "No More Posts..."
+                    you have seen all available posts, or need to tap "Everyone" to show posts from all attendees.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

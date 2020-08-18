@@ -1,0 +1,14 @@
+<ng-container *ngIf="post.likes?.length">
+    <ion-icon name="md-thumbs-up"></ion-icon>
+    <ng-container *ngIf="post.likes.length == 1">
+        <a (click)="goToParticipant(post.likes[0]._id)">{{ post.likes[0].participantName }}</a>
+    </ng-container>
+    <ng-container *ngIf="post.likes.length == 2">
+        {{ post.likes[0].participantName }} and {{ post.likes[1].participantName }}
+    </ng-container>
+    <ng-container *ngIf="post.likes.length > 2">
+        <a (click)="openList('Like', post.likes)">
+            {{ post.likes[0].participantName }}, {{ post.likes[1].participantName }}, and
+            {{ post.likes.length - 2 }} others
+        </a>
+</ng-container>

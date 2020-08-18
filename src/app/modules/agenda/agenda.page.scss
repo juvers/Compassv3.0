@@ -1,0 +1,59 @@
+.agenda-item-actions {
+    --inner-padding-end: 0px;
+    ion-button {
+        font-size: 12px;
+        height: 100%;
+        font-weight: normal;
+        text-transform: none;
+        --padding-end: 2px;
+        --padding-start: 2px;
+
+        ion-icon {
+            font-size: 30px;
+        }
+    }
+}
+
+.actions-bar {
+    --background: var(--ion-color-medium-dark);
+    ion-button {
+        --background: var(--ion-color-medium-dark);
+        --background-activated: var(--ion-color-medium-dark);
+        --background-hover: var(--ion-color-medium-dark);
+        --background-focused: var(--ion-color-medium-dark);
+        height: 42px;
+    }
+    .wave-button {
+        --ripple-color: var(--ion-color-medium-dark);
+        --opacity: 1;
+    }
+}
+
+.agenda-event {
+    ion-card-content {
+        ion-grid {
+            ion-row {
+                .event-name {
+                    color: var(--ion-color-dark-shade);
+                    font-size: 16px;
+                }
+                ion-icon {
+                    font-size: 16px;
+                    position: relative;
+                    top: 3px;
+                }
+            }
+        }
+    }
+}
+
+ion-spinner {
+    margin-top: 60px;
+    margin-left: auto;
+    display: block;
+    margin-right: auto;
+}
+
+ion-list {
+    width: 100%;
+}

@@ -1,0 +1,8 @@
+<ion-list>
+    <ion-item-divider>
+        <h2>{{ title }}</h2>
+    </ion-item-divider>
+    <ion-item *ngFor="let participant of participants" (click)="goToParticipant(participant._id)">
+        {{ participant.participantName }}
+    </ion-item>
+</ion-list>

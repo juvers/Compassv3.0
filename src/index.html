@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Compass</title>
+
+        <!-- TODO: LATER: DELETE  after upgrade to ionic 5
+             this is required for typescript 3.7 support so we can use Optional Chaining, by the 
+            end of the project this will be for sure supported by angular (as it is already in beta) and we can remove this whole script tag -->
+
+        <script type="text/javascript">
+            var __importDefault =
+                (this && this.__importDefault) ||
+                function(mod) {
+                    return mod && mod.__esModule ? mod : { default: mod };
+                };
+        </script>
+        <!-- TODO: LATER: DELETE after upgrade to ionic 5
+            on the examples I found online those other lines were at the begining of the code above but seems that we don't need for now, keeping it here for reference
+            
+            var __importStar =
+                (this && this.__importStar) ||
+                function(mod) {
+                    if (mod && mod.__esModule) return mod;
+                    var result = {};
+                    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+                    result['default'] = mod;
+                    return result;
+                };
+        -->
+        <base href="/" />
+
+        <meta
+            name="viewport"
+            content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <link rel="icon" type="image/png" href="assets/favicon.ico" />
+
+        <!-- add to homescreen for ios -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    </head>
+
+    <body>
+        <sei-root></sei-root>
+    </body>
+</html>

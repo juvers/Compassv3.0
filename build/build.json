@@ -1,0 +1,46 @@
+{
+    "ios": {
+        "debug": {
+            "developmentTeam": "8LLU46YY79",
+            "automaticProvisioning": true,
+            "packageType": "development"
+        },
+        "release": {
+            "developmentTeam": "8LLU46YY79",
+            "codeSignIdentity": "SEI",
+            "provisioningProfile": "PROVISIONING_PROFILE_NAME",
+            "packageType": "app-store",
+            "bundleIdentifier": "com.seimi.compass"
+        }
+    },
+    "android": {
+        "debug": {
+            "keystore": ".compass.keystore",
+            "storePassword": "YourPasssword",
+            "alias": "alias-compass"
+        },
+        "release": {
+            "keystore": ".compass.prod.keystore",
+            "storePassword": "YourPassword",
+            "alias": "alias-compass"
+        }
+    },
+    "compass": {
+        "android": {
+            "path": "platforms/android/app/build/outputs/apk",
+            "debug": {
+                "appcenterApp": "SEI-Meetings-and-Incentives/compass-android"
+            }
+        },
+        "ios": {
+            "keychain": "compass.keychain",
+            "keychainPassword": "YourPassword",
+            "path": "platforms/ios/build/device",
+            "debug": {
+                "appcenterApp": "SEI-Meetings-and-Incentives/compass-ios"
+            },
+            "release": {}
+        },
+        "appcenterGroup": "Test"
+    }
+}

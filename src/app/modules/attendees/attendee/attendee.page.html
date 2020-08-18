@@ -1,0 +1,184 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title> Attendee Profile </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content color="secondary">
+    <ng-container *ngIf="participant$ | async as participant">
+        <ion-item class="ion-justify-content-center align-items-center ion-text-center" color="secondary" lines="none">
+            <ion-grid>
+                <ion-row>
+                    <sei-participant-avatar [size]="'large'" [participant]="participant"></sei-participant-avatar>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-text-center ion-no-padding">
+                        <h2>{{participant.participantName}}</h2>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="participant.guest">
+                    <ion-col class="ion-text-center  ion-no-padding">
+                        <h3>Guest</h3>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="participant.programWave">
+                    <ion-col class="ion-text-center  ion-no-padding">
+                        <h3>{{waveLabel}} {{participant.programWave}}</h3>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="participant.participantTitleRow1">
+                    <ion-col class="ion-text-center  ion-no-padding">
+                        {{participant.participantTitleRow1}}
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="participant.participantTitleRow2">
+                    <ion-col class="ion-text-center  ion-no-padding">
+                        {{participant.participantTitleRow2}}
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="participant.participantTitleRow3">
+                    <ion-col class="ion-text-center ion-no-padding">
+                        {{participant.participantTitleRow3}}
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="participant.participantTitleRow4">
+                    <ion-col class="ion-text-center ion-no-padding">
+                        {{participant.participantTitleRow4}}
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+
+        <ion-card color="background">
+            <ion-item>
+                <ion-grid class="item-counts ">
+                    <ion-row>
+                        <ion-col (click)="openPosts()">
+                            <h1>
+                                {{(posts$ | async)?.length}}
+                            </h1>
+                        </ion-col>
+
+                        <ion-col (click)="openFollowers()">
+                            <h1>
+                                {{(followers$ | async)?.length}}
+                            </h1>
+                        </ion-col>
+
+                        <ion-col (click)="openFollowing()">
+                            <h1>
+                                {{(following$ | async)?.length}}
+                            </h1>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col (click)="openPosts()">
+                            POSTS
+                        </ion-col>
+
+                        <ion-col (click)="openFollowers()"> FOLLOWERS </ion-col>
+
+                        <ion-col (click)="openFollowing()"> FOLLOWING </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+
+            <ion-item-divider color="light">
+                About
+            </ion-item-divider>
+            <ion-item>
+                <ion-grid>
+                    <ion-row *ngIf="participant.participantGuestName">
+                        <ion-col>
+                            Guest: {{participant.participantGuestName}}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="isCurrentUser$ | async">
+                        <ion-col>
+                            <ion-button
+                                color="tertiary"
+                                expand="block"
+                                size="large"
+                                [routerLink]="['/attendees', attendeeId, 'edit']"
+                            >
+                                <ion-icon name="settings"></ion-icon>
+                                Edit Profile
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-button
+                                color="tertiary"
+                                expand="block"
+                                size="large"
+                                (click)="follow()"
+                                *ngIf="!(isCurrentUser$ | async)"
+                            >
+                                <ion-icon name="aperture"></ion-icon>
+                                <span *ngIf="isFollowingUser$  | async">
+                                    Unfollow
+                                </span>
+
+                                <span *ngIf="!(isFollowingUser$  | async)">
+                                    Follow
+                                </span>
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+            <ng-container
+                *ngIf="(participant.participant_mobile_phone || participant.participant_email_address) && (showContact$ | async)"
+            >
+                <ion-item-divider color="light">
+                    Contact
+                </ion-item-divider>
+                <ion-item>
+                    <ion-grid>
+                        <ion-row *ngIf="participant.participant_mobile_phone">
+                            <ion-col>
+                                <ion-button
+                                    color="tertiary"
+                                    expand="block"
+                                    size="large"
+                                    (click)="loadExternalBrowserTel(participant.participant_mobile_phone)"
+                                >
+                                    <ion-icon name="call"></ion-icon>
+                                    <!-- TODO: A7 link -->
+                                    <span>
+                                        {{participant.participant_mobile_phone | formatPhoneNumber}}
+                                    </span>
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row *ngIf="participant.participant_email_address">
+                            <ion-col>
+                                <ion-button
+                                    color="tertiary"
+                                    expand="block"
+                                    (click)="loadExternalBrowserEmail(participant.participant_email_address)"
+                                >
+                                    <ion-icon name="mail"></ion-icon>
+                                    <!-- TODO: A7 link -->
+                                    <span>
+                                        {{participant.participant_email_address}}
+                                    </span>
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-item>
+            </ng-container>
+        </ion-card>
+    </ng-container>
+</ion-content>

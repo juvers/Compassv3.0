@@ -1,0 +1,11 @@
+[
+    {
+        "_id": 1,
+        "follow": [
+            {
+                "_id": 1,
+                "participantFollow": 1
+            }
+        ]
+    }
+]

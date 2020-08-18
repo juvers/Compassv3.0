@@ -1,0 +1,39 @@
+<ion-header>
+    <sei-header title="Help" [modalHeader]="true" (close)="close()"></sei-header>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+        <ion-item-divider color="light"> <h6>Getting Started with Attendees</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    Tap a user to view user's profile.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-item-divider color="light"> <h6>Attendees Agenda</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    Tap the Agenda tab to view the user's agenda. The agenda will list all the scheduled activities the
+                    user is registered for, it does not confirm the anttendee is actually at the event.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-item-divider color="light"> <h6>No Attendees Error</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    If attendees fail to load, you may have lost Internet connection.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

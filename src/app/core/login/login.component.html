@@ -1,0 +1,74 @@
+<ion-header>
+    <sei-header title="Login" [modalHeader]="true" (close)="close()"></sei-header>
+</ion-header>
+
+<ion-content>
+    <ng-container>
+        <form
+            [formGroup]="loginForm"
+            class="compass-form"
+            name="loginForm"
+            (ngSubmit)="login()"
+            (keyup.enter)="login()"
+        >
+            <ion-item>
+                <ion-label color="dark" position="floating">
+                    <span class="login-placeholder-username">Username</span>
+                    <span class="label-placeholder"> ({{ config?.loginPlaceholderEmail }}) </span>
+                </ion-label>
+
+                <ion-input autocomplete="username" formControlName="username" name="username" type="text"></ion-input>
+            </ion-item>
+            <ion-form-error-messages [messages]="errorMessages" [formGroup]="loginForm" control="username">
+            </ion-form-error-messages>
+            <ion-item>
+                <ion-label position="floating">{{ config?.loginPlaceholderPassword }}</ion-label>
+                <ion-input
+                    autocomplete="current-password"
+                    formControlName="password"
+                    name="password"
+                    type="password"
+                ></ion-input>
+            </ion-item>
+            <ion-form-error-messages [messages]="errorMessages" [formGroup]="loginForm" control="password">
+            </ion-form-error-messages>
+            <div class="form-button">
+                <ion-button expand="block" type="submit">Log in</ion-button>
+            </div>
+            <ion-item *ngIf="config?.loginText">
+                <ion-label class="ion-text-wrap" color="medium-dark">
+                    {{ config.loginText }}
+                </ion-label>
+            </ion-item>
+            <ion-item *ngIf="authenticationError">
+                <ion-label color="danger">
+                    Invalid login
+                </ion-label>
+            </ion-item>
+        </form>
+
+        <ion-item>
+            <ion-label class="ion-text-wrap">
+                <div><strong>Forgot Password?</strong></div>
+                <ion-text color="medium-dark">
+                    Enter your email address below and tap Forgot Password.
+                </ion-text>
+            </ion-label>
+        </ion-item>
+
+        <form [formGroup]="loginForgotForm" name="loginForgotForm" (ngSubmit)="forgotLogin()">
+            <ion-item>
+                <ion-label position="floating">{{ config?.loginPlaceholderForgotPasswordEmail }}</ion-label>
+                <ion-input formControlName="emailforgot" name="emailforgot" type="email"></ion-input>
+            </ion-item>
+            <ion-form-error-messages [messages]="errorMessages" [formGroup]="loginForgotForm" control="emailforgot">
+            </ion-form-error-messages>
+
+            <div class="form-button">
+                <ion-button expand="block" type="submit">Forgot Password</ion-button>
+            </div>
+            <ion-item *ngIf="loginTextForgot"> {{ loginTextForgot }} </ion-item>
+            <ion-item color="danger" *ngIf="loginForgotError"> {{ loginForgotError }} </ion-item>
+        </form>
+    </ng-container>
+</ion-content>

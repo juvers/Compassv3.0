@@ -1,0 +1,30 @@
+<ion-header>
+    <sei-header title="Help" [modalHeader]="true" (close)="close()"></sei-header>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+        <ion-item-divider color="light"> <h6>Getting Started with Agenda</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    Swipe left or right to view events on each day.Tap the<ion-icon name="add"></ion-icon> Calendar icon
+                    to add the event to your device calendar. Tap review to see all your selections.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-item-divider color="light"> <h6>No Events Error</h6> </ion-item-divider>
+        <ion-card-content>
+            <ion-item lines="none">
+                <p>
+                    If events fail to load, first try swiping down to refresh the page. You must allow calendar access
+                    on your device. If you do not get a notice to allow access to your calendar, you may have disabled
+                    it from your device application settings.
+                </p>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

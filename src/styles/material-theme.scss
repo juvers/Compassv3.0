@@ -1,0 +1,128 @@
+@import './material-colors';
+@import '~@angular/material/theming';
+
+// include all in-use material components in this mixin to apply the same theme
+@mixin angular-material-theme($theme) {
+    @include mat-core-theme($theme);
+    // examples
+    // @include mat-autocomplete-theme($theme);
+    // @include mat-button-theme($theme);
+    // @include mat-button-toggle-theme($theme);
+    // @include mat-card-theme($theme);
+    // @include mat-checkbox-theme($theme);
+    // @include mat-chips-theme($theme);
+    // @include mat-datepicker-theme($theme);
+    // @include mat-dialog-theme($theme);
+    // @include mat-grid-list-theme($theme);
+    // @include mat-icon-theme($theme);
+    // @include mat-input-theme($theme);
+    // @include mat-list-theme($theme);
+    // @include mat-menu-theme($theme);
+    // @include mat-progress-bar-theme($theme);
+    // @include mat-progress-spinner-theme($theme);
+    // @include mat-radio-theme($theme);
+    // @include mat-select-theme($theme);
+    // @include mat-sidenav-theme($theme);
+    // @include mat-slide-toggle-theme($theme);
+    // @include mat-slider-theme($theme);
+    // @include mat-toolbar-theme($theme);
+    // @include mat-tooltip-theme($theme);
+
+    @include mat-badge-theme($theme);
+    @include mat-expansion-panel-theme($theme);
+    @include mat-tabs-theme($theme);
+}
+
+@include mat-core();
+
+@function theme-foreground($color) {
+    $rgb-color: mat-color(mat-palette($color));
+
+    @return (
+        base: $rgb-color,
+        divider: $black-12-opacity,
+        dividers: $black-12-opacity,
+        disabled: rgba($rgb-color, 0.38),
+        disabled-button: rgba($rgb-color, 0.38),
+        disabled-text: rgba($rgb-color, 0.38),
+        hint-text: rgba($rgb-color, 0.38),
+        secondary-text: rgba($rgb-color, 0.54),
+        icon: rgba($rgb-color, 0.54),
+        icons: rgba($rgb-color, 0.54),
+        text: $rgb-color,
+        slider-off: rgba($rgb-color, 0.26),
+        slider-off-active: rgba($rgb-color, 0.38)
+    );
+}
+
+@function theme-background($color) {
+    $rgb-color: mat-color(mat-palette($color));
+
+    @return (
+        status-bar: map_get($color, 300),
+        app-bar: map_get($color, 100),
+        background: map_get($color, 50),
+        hover: rgba(black, 0.04),
+        dialog: white,
+        disabled-button: rgba($rgb-color, 0.5),
+        raised-button: white,
+        focused-button: rgba($rgb-color, 0.12),
+        selected-button: map_get($color, 300),
+        selected-disabled-button: map_get($color, 400),
+        disabled-button-toggle: map_get($color, 200)
+    );
+}
+
+// Define a theme here. It's possible to use different themes for different components.
+// More information: https://material.angular.io/guide/theming#changing-styles-at-run-time
+$sei-app-primary: mat-palette($sei-tertiary);
+$sei-app-accent: mat-palette($sei-warning);
+$sei-app-warn: mat-palette($sei-danger);
+$sei-app-dark: mat-palette($sei-dark);
+$sei-app-light: mat-palette($sei-light);
+$sei-app-success: mat-palette($sei-success);
+$sei-app-background: $mat-light-theme-background;
+$sei-app-foreground: theme-foreground($sei-dark);
+
+@function mat-light-theme(
+    $primary,
+    $accent,
+    $warn,
+    $foreground: $mat-light-theme-foreground,
+    $background: $mat-light-theme-background
+) {
+    @return (
+        primary: $primary,
+        accent: $accent,
+        warn: $warn,
+        is-dark: false,
+        foreground: $foreground,
+        background: $background
+    );
+}
+
+$sei-app-theme: mat-light-theme(
+    $sei-app-primary,
+    $sei-app-accent,
+    $sei-app-warn,
+    $sei-app-foreground,
+    $sei-app-background
+);
+$sei-app-theme: map-merge(
+    $sei-app-theme,
+    (
+        success: $sei-app-success
+    )
+);
+
+@include angular-material-theme($sei-app-theme);
+
+// Here we override css properties of individual material components
+
+.mat-expansion-panel-body {
+    padding: 0 !important;
+}
+
+.mat-tab-label {
+    width: 100%;
+}

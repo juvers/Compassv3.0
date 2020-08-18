@@ -1,0 +1,44 @@
+<ngx-confetti [options]="confettiOptions"></ngx-confetti>
+<ion-card-title class="ion-text-center ion-padding-top ion-margin-top" *ngIf="post.postTemplate === 1">
+    Happy Birthday!
+</ion-card-title>
+<ion-card-title class="ion-text-center ion-padding-top ion-margin-top" *ngIf="post.postTemplate === 2">
+    WINNER!
+</ion-card-title>
+<ion-card-header *ngIf="post.tags?.length === 1">
+    <ion-grid class="promoted-post-birthday-grid">
+        <ion-row>
+            <ion-col>
+                <ngx-avatar
+                    (click)="goToParticipant()"
+                    [name]="post.tags[0].participantName"
+                    [round]="true"
+                    [src]="participantPhotos$ | async | chooseImage"
+                    class="center-element"
+                    size="50"
+                >
+                </ngx-avatar>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                {{ post.postContentUpdatedAt | amTimeAgo }}
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col (click)="goToParticipant()">
+                <ion-text color="tertiary">
+                    {{ post.tags[0].participantName }}
+                </ion-text>
+            </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="post.location > 0">
+            <ion-col>
+                <sei-location [id]="post.location"></sei-location>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-card-header>
+
+<ion-card-content class="post-text" [innerHtml]="post.text | hrefToJs"></ion-card-content>

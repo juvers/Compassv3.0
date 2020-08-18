@@ -1,0 +1,70 @@
+<ion-header>
+    <sei-header title="Locations">
+        <ion-button (click)="showFilters = !showFilters"><ion-icon name="funnel"></ion-icon></ion-button>
+        <ion-button fill="clear" (click)="showHelp()">
+            <ion-icon name="help-circle"></ion-icon>
+        </ion-button>
+    </sei-header>
+</ion-header>
+
+<ion-content>
+    <ion-list *ngIf="locations$ | async as locations; else noLocation">
+        <ng-container *ngFor="let location of locations">
+            <ion-item *ngIf="!location.isHidden" lines="full" [routerLink]="['/locations', location.location_id]">
+                <ngx-avatar
+                    class="location-avatar"
+                    [name]="location.location_name"
+                    [round]="true"
+                    [size]="50"
+                    [src]="location.location_photo"
+                ></ngx-avatar>
+                <ion-grid class="location-grid">
+                    <ion-row>
+                        <ion-col class="location-name">
+                            {{location.location_name}}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="location.location_category">
+                        <ion-col>
+                            {{location.location_category}}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="location.location_subcategory">
+                        <ion-col>
+                            {{location.location_subcategory}}
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row *ngIf="location.location_roombooth_value">
+                        <ion-col>
+                            {{location.location_roombooth_verbiage}}: {{location.location_roombooth_value}}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="location.location_address_street">
+                        <ion-col>
+                            {{location.location_address_street}}
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="location.location_address_city">
+                        <ion-col>
+                            {{location.location_address_city}}<ng-container
+                                *ngIf="location.location_address_state || location.location_address_zipcode"
+                                >, {{location.location_address_state}} {{location.location_address_zipcode}}
+                            </ng-container>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="locationOptions.showLocationRatingAbility && location.count_rating > 0">
+                        <ion-col>
+                            User Rating: {{location.average_rating | number: '1.2-2'}}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+        </ng-container>
+    </ion-list>
+    <ng-template #noLocation>
+        <ion-card>
+            No location information available...
+        </ion-card>
+    </ng-template>
+</ion-content>

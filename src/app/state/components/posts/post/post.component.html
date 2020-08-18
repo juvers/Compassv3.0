@@ -1,0 +1,60 @@
+<ion-item lines="none" class="post-header">
+    <sei-participant-avatar slot="start" [participant]="post?.participant"></sei-participant-avatar>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                {{ post.participant?.participantName }}
+                <ng-container *ngIf="(following$ | async) && !(isPostFromCurrentUser$ | async)">
+                    -
+                    <ion-text color="primary" (click)="showFollowingOptions()">
+                        Following
+                    </ion-text>
+                </ng-container>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                {{ verbiageProgramWave }} {{ (participant$ | async)?.programWave }} -
+                {{ post.postContentUpdatedAt | amTimeAgo }}
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col> </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-button size="large" fill="clear" (click)="showOptions()" class="post-options-button ion-float-end">
+        <ion-icon size="small" name="ios-arrow-down"></ion-icon>
+    </ion-button>
+</ion-item>
+<ion-card-content class="post-text" [innerHtml]="post.text | hrefToJs"></ion-card-content>
+
+<ion-card-content *ngIf="post.tags?.length">
+    <sei-post-tags [post]="post"></sei-post-tags>
+</ion-card-content>
+<ion-card-content *ngIf="post.likes?.length" class="post-likes">
+    <sei-post-likes [post]="post"></sei-post-likes>
+</ion-card-content>
+
+<ion-card-content *ngIf="post.location > 0" class="post-likes">
+    <sei-location [id]="post.location"></sei-location>
+</ion-card-content>
+
+<sei-post-images [post]="post"></sei-post-images>
+
+<ion-grid class="post-buttons">
+    <ion-row class="ion-justify-content-center align-items-center">
+        <ion-col class="ion-text-center">
+            <ion-button fill="clear" [color]="post.likes?.length ? 'secondary' : 'medium'" (click)="likeToggle()">
+                <ion-icon name="md-thumbs-up" size="large"></ion-icon>
+                <span *ngIf="post.likes?.length" [innerText]="post.likes?.length"></span>
+            </ion-button>
+        </ion-col>
+        <ion-col class="ion-text-center">
+            <ion-button fill="clear" [color]="post.commentsCount ? 'secondary' : 'medium'" (click)="postDetails()">
+                <ion-icon name="chatboxes" size="large"></ion-icon>
+                <span *ngIf="post.commentsCount" [innerText]="post.commentsCount"></span>
+            </ion-button>
+        </ion-col>
+    </ion-row>
+</ion-grid>

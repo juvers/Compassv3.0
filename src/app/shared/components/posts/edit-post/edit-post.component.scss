@@ -1,0 +1,17 @@
+@import '../post.components.scss';
+.textarea-item {
+    --highlight-color-focused: var(--ion-color-tertiary);
+    --highlight-color-valid: var(--ion-color-tertiary);
+}
+
+.post-header {
+    width: 100%;
+}
+:host {
+    .textarea-item.ion-invalid {
+        --highlight-background: var(--ion-color-tertiary) !important;
+    }
+    .textarea-item.ion-valid {
+        --highlight-background: var(--ion-color-tertiary) !important;
+    }
+}
