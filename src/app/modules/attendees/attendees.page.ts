@@ -24,6 +24,7 @@ export class AttendeesPage implements OnDestroy, OnInit {
     waves$ = this.participantService.waves$;
     participantCount$ = this.participantService.count$;
     showFilters = false;
+    checkAll = false;
 
     filterForm = new FormGroup({
         sortBy: new FormControl(''),
@@ -38,6 +39,9 @@ export class AttendeesPage implements OnDestroy, OnInit {
         return SETTINGS.verbiageProgramWave;
     }
 
+    segmentChanged(ev: any) {
+     this.checkAll = ev.detail.value;
+     }
     // TODO: leaderboard
     get isLeaderboardSelected() {
         return this.filterForm.controls?.sortBy?.value === 'leaderboard';

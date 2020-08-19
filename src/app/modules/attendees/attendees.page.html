@@ -81,6 +81,14 @@
 
         <ion-list>
             <ng-container *ngIf="attendees$ | async as attendees;">
+            <ion-segment (ionChange)="segmentChanged($event)">
+                <ion-segment-button value="true">
+                    <ion-label>Check All</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="false">
+                    <ion-label>Uncheck All</ion-label>
+                </ion-segment-button>
+            </ion-segment>
                 <ion-item *ngFor="let  attendee of  attendees" lines="full">
                     <sei-participant-avatar [routerLink]="['/attendees', attendee._id]" slot="start" [participant]="attendee"></sei-participant-avatar>
                     <ion-grid>
@@ -128,7 +136,7 @@
 <!--  -->
                     <ion-col>
                              <div>
-                             <ion-checkbox></ion-checkbox>
+                             <ion-checkbox [checked]=checkAll color="primary"></ion-checkbox>
                              </div>
                             
                             </ion-col>
