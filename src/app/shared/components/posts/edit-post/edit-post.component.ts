@@ -38,7 +38,11 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
     postForm = new FormGroup({
         content: new FormControl(''),
         postFeatured: new FormControl(''),
-        postTemplate: new FormControl('')
+        postTemplate: new FormControl(''),
+        postStartDate: new FormControl(''),
+        postStartTime: new FormControl(''),
+        postEndDate: new FormControl('')
+
     });
     // comments$ = this.commentService.query.selectAll({ filterBy: comment => this.post._id === comment.postId });
 
@@ -65,6 +69,7 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
     }
 
     ngOnInit() {
+        
         this.latestPost$.pipe(first()).subscribe(l => (this.postTemplate = l?.postTemplate));
         if (!this.post) {
             this.post = new Post();
@@ -150,10 +155,12 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
     }
 
     submitPost() {
+        console.log("Inside submitPost",this.postForm)
         this.post.text = this.postForm.controls.content.value;
         this.post.postTemplate = this.postForm.controls.postTemplate.value || 0;
         this.post.featuredPost = !!this.postForm.controls.postFeatured.value;
         this.post.tagsLocation = this.post.tagsLocation || 0;
+        // this.post.postUpdatedAt = this
 
         // TODO: CORDOVA: UPLOAD PHOTOS
         const payload: Partial<Post> = {

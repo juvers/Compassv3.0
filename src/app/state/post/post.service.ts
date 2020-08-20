@@ -67,12 +67,15 @@ export class PostService extends SeiEntityService<PostState> {
 
     load() {
         const params: { [param: string]: string } = {};
-
+        // this.items$.pipe(first()).pipe(flatMap(x => x)).subscribe(x => console.log("iside first pipe: ", x));
+        
+        
         return this.items$.pipe(first()).pipe(
             flatMap(posts => {
                 if (this.postUpdatedAt && posts?.length > 0) {
                     params.postUpdatedAt = this.postUpdatedAt;
                 }
+                // console.log("Inside params: ",params.postUpdatedAt)
 
                 let count = 0;
 
@@ -84,9 +87,11 @@ export class PostService extends SeiEntityService<PostState> {
                         if (res?.length) {
                             count = res.length;
                         }
+                        // console.log("what is res: ", res[res.length -1].postUpdatedAt);
                         if (res?.length > 0) {
                             this.postUpdatedAt = res[res.length - 1].postUpdatedAt;
                         }
+                        // console.log("Testing what dmapper returns: ",DefaultObjectMapper.map(res, Post))
                         return DefaultObjectMapper.map(res, Post);
                     }
                 }).pipe(map(() => count));
